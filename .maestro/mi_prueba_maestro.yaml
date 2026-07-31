@@ -1,0 +1,10 @@
+appId: com.taskmanager.app
+---
+- launchApp
+- extendedWaitUntil:
+    timeout: 40000
+    visible: "Nueva tarea"
+- tapOn: "Nueva tarea"
+- inputText: "Alejandro Dussan actividad 1"
+- tapOn: "Guardar"
+- assertVisible: "Alejandro Dussan actividad 1"
