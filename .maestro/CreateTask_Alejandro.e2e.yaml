@@ -1,0 +1,40 @@
+appId: com.taskmanager.app
+---
+
+# =====================================================
+# Verificar que un usuario pueda crear una tarea
+# desde el módulo "Flujo Todo List".
+# =====================================================
+
+# Abrir la aplicación desde un estado limpio
+- launchApp:
+    clearState: true
+
+# Esperar la pantalla principal
+- extendedWaitUntil:
+    visible: "Task Manager"
+    timeout: 70000
+
+# Ingresar al módulo
+- tapOn: "Flujo Todo List"
+
+# Esperar el formulario
+- extendedWaitUntil:
+    visible: "Nueva tarea"
+    timeout: 10000
+
+# Seleccionar el campo de texto
+- tapOn:
+    id: "input-titulo"
+
+# Escribir el título de la tarea
+- inputText: "Tarea creada por Alejandro"
+
+# Guardar la tarea
+- tapOn: "Guardar"
+
+# Validar que el sistema informa éxito
+- assertVisible: "Tarea creada exitosamente"
+
+# Verificar que la tarea fue agregada a la lista
+- assertVisible: "Tarea creada por Alejandro"

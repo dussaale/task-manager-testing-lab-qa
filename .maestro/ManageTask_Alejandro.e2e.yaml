@@ -1,0 +1,50 @@
+appId: com.taskmanager.app
+---
+
+# =====================================================
+# Validar el ciclo de vida completo
+# de una tarea (crear, completar y eliminar).
+# =====================================================
+
+# Abrir la aplicación desde un estado limpio
+- launchApp:
+    clearState: true
+
+# Esperar la pantalla principal
+- extendedWaitUntil:
+    visible: "Task Manager"
+    timeout: 70000
+
+# Ingresar al módulo Flujo Todo List
+- tapOn: "Flujo Todo List"
+
+# Esperar que cargue el formulario
+- extendedWaitUntil:
+    visible: "Nueva tarea"
+    timeout: 10000
+
+# Crear una nueva tarea
+- tapOn:
+    id: "input-titulo"
+
+- inputText: "Gestionar tarea Alejandro"
+
+- tapOn: "Guardar"
+
+# Validar creación exitosa
+- assertVisible: "Tarea creada exitosamente"
+
+# Validar que la tarea aparece en la lista
+- assertVisible: "Gestionar tarea Alejandro"
+
+# Solicitar eliminación
+- tapOn: "Eliminar"
+
+# Validar que aparece el diálogo de confirmación
+- assertVisible: "Eliminar tarea"
+
+# Confirmar eliminación
+- tapOn: "Eliminar"
+
+# Validar que la tarea ya no existe
+- assertVisible: "No hay tareas aún"

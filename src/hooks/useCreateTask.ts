@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Task } from '../types';
+import { createTask } from '../services/taskService';
+import { appConfig } from '../config/appConfig';
 
 const STORAGE_KEY = 'tasks';
 
@@ -12,7 +14,9 @@ export function useCreateTask() {
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
-        if (raw) setTasks(JSON.parse(raw));
+        if (raw) {
+          setTasks(JSON.parse(raw));
+        }
       })
       .catch(() => {})
       .finally(() => {
@@ -21,21 +25,33 @@ export function useCreateTask() {
   }, []);
 
   useEffect(() => {
-    // ponytail: no guardar antes de terminar de cargar, si no el [] inicial pisa lo guardado
     if (!loaded.current) return;
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)).catch(() => {});
   }, [tasks]);
+const submit = async (title: string) => {
+  try {
+    if (appConfig.useApi) {
+      // Modo Integración (MSW)
+      const task = await createTask(title);
 
-  const submit = async (title: string) => {
-    const task: Task = {
-      id: Date.now().toString(),
-      title: title,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-    };
-    setTasks((prev) => [...prev, task]);
+      setTasks((prev) => [...prev, task]);
+    } else {
+      // Modo Maestro (almacenamiento local)
+      const task: Task = {
+        id: Date.now().toString(),
+        title,
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+      };
+
+      setTasks((prev) => [...prev, task]);
+    }
+
     setStatus('success');
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   const removeTask = (id: string) => {
     setTasks((prev) => prev.filter((t) => t.id !== id));
@@ -44,10 +60,21 @@ export function useCreateTask() {
   const toggleTask = (id: string) => {
     setTasks((prev) =>
       prev.map((t) =>
-        t.id === id ? { ...t, status: t.status === 'completed' ? 'pending' : 'completed' } : t
+        t.id === id
+          ? {
+              ...t,
+              status: t.status === 'completed' ? 'pending' : 'completed',
+            }
+          : t
       )
     );
   };
 
-  return { status, tasks, submit, removeTask, toggleTask };
+  return {
+    status,
+    tasks,
+    submit,
+    removeTask,
+    toggleTask,
+  };
 }

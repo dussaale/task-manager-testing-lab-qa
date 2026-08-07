@@ -1,0 +1,83 @@
+appId: com.taskmanager.app
+---
+
+# =====================================================
+# Verificar que un usuario pueda diligenciar
+# correctamente el formulario y confirmar
+# una transacción.
+# =====================================================
+
+# Abrir la aplicación desde un estado limpio
+- launchApp:
+    clearState: true
+
+# Esperar la pantalla principal
+- extendedWaitUntil:
+    visible: "Task Manager"
+    timeout: 70000
+
+# Ingresar al módulo Flujo Transaccional
+- tapOn: "Flujo Transaccional"
+
+# Esperar que cargue el formulario
+- extendedWaitUntil:
+    visible: "Información del usuario"
+    timeout: 10000
+
+# =====================================================
+# INFORMACIÓN DEL USUARIO
+# =====================================================
+
+- tapOn: "Juan Pérez"
+- eraseText
+- inputText: "Alejandro Dussan"
+
+- tapOn: "juan@correo.com"
+- eraseText
+- inputText: "alejandro@test.com"
+
+- tapOn: "+57 300 000 0000"
+- eraseText
+- inputText: "3001234567"
+
+# =====================================================
+# ENVÍO Y ENTREGA
+# =====================================================
+
+- tapOn: "Calle 123 #45-67"
+- eraseText
+- inputText: "Carrera 15 #100-25"
+
+- tapOn: "Bogotá"
+- eraseText
+- inputText: "Medellín"
+
+- tapOn: "110111"
+- eraseText
+- inputText: "050001"
+
+# =====================================================
+# MEDIO DE PAGO
+# =====================================================
+
+- tapOn: "Juan Pérez"
+- eraseText
+- inputText: "Alejandro Dussan"
+
+- tapOn: "4111 1111 1111 1111"
+- eraseText
+- inputText: "4111111111111111"
+
+- tapOn: "12/28"
+- eraseText
+- inputText: "12/30"
+
+- tapOn: "123"
+- eraseText
+- inputText: "456"
+
+# Desplazarse hasta el botón
+- scroll
+
+# Confirmar la transacción
+- tapOn: "Confirmar pago"
