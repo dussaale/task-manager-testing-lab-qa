@@ -1,17 +1,16 @@
-name: Test Suite
+name: Tests CI - Alejandro
 
 on:
   push:
-    branches: [main, develop]
   pull_request:
-    branches: [main]
 
 jobs:
   test:
+    name: Ejecutar pruebas y cobertura
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout del código
+      - name: Descargar código
         uses: actions/checkout@v4
 
       - name: Configurar Node.js
@@ -23,8 +22,8 @@ jobs:
       - name: Instalar dependencias
         run: npm ci --legacy-peer-deps
 
-      - name: Verificar tipos
-        run: npx tsc --noEmit
+      - name: Ejecutar suite completa de pruebas
+        run: npm test -- --runInBand
 
       - name: Ejecutar pruebas con cobertura
-        run: npx jest --coverage --ci
+        run: npm run test:coverage -- --runInBand

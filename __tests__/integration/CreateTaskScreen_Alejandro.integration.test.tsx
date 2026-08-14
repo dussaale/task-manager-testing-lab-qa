@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { CreateTaskScreen } from '../../src/screens/CreateTaskScreen';
 import { http, HttpResponse } from 'msw';
 import { server } from '../../src/mocks/server';
+import { appConfig } from '../../src/config/appConfig';
 
 
 const metrics = {
@@ -31,6 +32,14 @@ const renderScreen = () =>
 
 describe('CreateTaskScreen - Integración MSW (Alejandro)', () => {
 
+beforeEach(() => {
+    appConfig.useApi = true;
+  });
+
+  afterEach(() => {
+    appConfig.useApi = false;
+    server.resetHandlers();
+  });
   /**
    * MSW-INT-001
    *
