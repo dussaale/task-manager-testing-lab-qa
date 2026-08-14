@@ -1,12 +1,11 @@
-import { TaskSchema, TaskListSchema } from '../../src/schemas/taskSchema';
+import { TaskApiResponseSchema } from '../../src/schemas/taskApi_Alejandro.schema';
 
 describe('Contrato API de Task Manager - Alejandro', () => {
   /**
-   * CONTRATO:
-   * GET /tasks
+   * Contrato del endpoint GET /tasks
    *
-   * La API debe devolver un arreglo de tareas.
-   * Cada tarea debe contener:
+   * La respuesta esperada es un arreglo de tareas.
+   * Cada tarea contiene:
    * - id: string
    * - title: string no vacío
    * - status: "pending" | "completed"
@@ -27,12 +26,12 @@ describe('Contrato API de Task Manager - Alejandro', () => {
       },
     ];
 
-    const result = TaskListSchema.safeParse(validResponse);
+    const result = TaskApiResponseSchema.safeParse(validResponse);
 
     expect(result.success).toBe(true);
   });
 
-  it('debe rechazar una respuesta inválida de GET /tasks', () => {
+  it('debe rechazar una respuesta inválida cuando id tiene un tipo incorrecto', () => {
     const invalidResponse = [
       {
         id: 123,
@@ -41,19 +40,21 @@ describe('Contrato API de Task Manager - Alejandro', () => {
       },
     ];
 
-    const result = TaskListSchema.safeParse(invalidResponse);
+    const result = TaskApiResponseSchema.safeParse(invalidResponse);
 
     expect(result.success).toBe(false);
   });
 
-  it('debe rechazar una tarea con un status que no pertenece al contrato', () => {
-    const invalidTask = {
-      id: '3',
-      title: 'Revisar contrato',
-      status: 'archived',
-    };
+  it('debe rechazar una respuesta inválida cuando status no pertenece al contrato', () => {
+    const invalidResponse = [
+      {
+        id: '3',
+        title: 'Revisar contrato',
+        status: 'archived',
+      },
+    ];
 
-    const result = TaskSchema.safeParse(invalidTask);
+    const result = TaskApiResponseSchema.safeParse(invalidResponse);
 
     expect(result.success).toBe(false);
   });
