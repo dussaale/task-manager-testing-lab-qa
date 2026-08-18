@@ -1,11 +1,24 @@
-describe('MSW - Validación de configuración', () => {
-  test('debe interceptar una petición GET usando MSW', async () => {
-    const response = await fetch('https://api.taskmanager.com/tasks');
+import { fetchTasks } from '../../src/services/taskService';
+import { createTask } from '../../src/services/taskService';
+import { resetTasks } from '../../src/mocks/handlers';
 
-    const data = await response.json();
+describe('MSW - Validación de configuración (Alejandro)', () => {
 
-    expect(response.status).toBe(200);
-    expect(data).toHaveLength(2);
-    expect(data[0].title).toBe('Tarea existente');
+  beforeEach(() => {
+    resetTasks();
   });
+
+  it('debe interceptar una petición GET y devolver las tareas creadas mediante MSW', async () => {
+
+    await createTask('Tarea existente');
+    await createTask('Segunda tarea');
+
+    const tasks = await fetchTasks();
+
+    expect(tasks).toHaveLength(2);
+    expect(tasks[0].title).toBe('Tarea existente');
+    expect(tasks[1].title).toBe('Segunda tarea');
+
+  });
+
 });
