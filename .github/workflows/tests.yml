@@ -25,5 +25,5 @@ jobs:
       - name: Ejecutar suite completa de pruebas
         run: npm test -- --runInBand
 
-      - name: Ejecutar pruebas con cobertura
+      - name: Ejecutar pruebas con cobertura y validar umbral
         run: npm run test:coverage -- --runInBand
